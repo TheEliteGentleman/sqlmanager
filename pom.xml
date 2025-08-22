@@ -1,11 +1,13 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>za.co.sindi</groupId>
-	<artifactId>sqlmanager</artifactId>
+	<artifactId>sindi-sqlmanager</artifactId>
 	<version>1.0.0</version>
 	<name>SQLManager</name>
-	<description>A library that makes it easy to execute SQL queries using the JDBC API. The developer only worries about data.</description>
+	<description>A library that makes it easy to execute SQL queries using the
+		JDBC API. The developer only worries about data.</description>
 
 	<developers>
 		<developer>
@@ -25,25 +27,155 @@
 		</license>
 	</licenses>
 
+	<scm>
+		<connection>scm:git:git://github.com/TheEliteGentleman/sqlmanager.git</connection>
+		<developerConnection>scm:git:git@github.com:TheEliteGentleman/sqlmanager.git</developerConnection>
+		<url>https://github.com/TheEliteGentleman/sqlmanager</url>
+		<tag>sqlmanager-1.0.0</tag>
+	</scm>
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/
+			</url>
+		</repository>
+	</distributionManagement>
+
 	<dependencies>
+		<!--
 		<dependency>
 			<groupId>za.co.sindi</groupId>
 			<artifactId>sindi-commons</artifactId>
 			<version>1.0.0</version>
 		</dependency>
+		-->
+		<!--
+		https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>5.10.0</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
-
+	
 	<build>
 		<!-- Tell Maven that this is a Java 1.7 project -->
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.11.0</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+			<!-- Maven Sources plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.3.0</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- Maven Javadoc plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.5.0</version>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<configuration>
+							<source>8</source>
+							<doclint>none</doclint>
+						</configuration>
+					</execution>
+				</executions>
+				<configuration>
+					<additionalOptions>
+						<additionalOption>-Xdoclint:none</additionalOption>
+					</additionalOptions>
+				</configuration>
+			</plugin>
+			<!--
+			https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-deploy-plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>3.1.1</version>
+				<executions>
+					<execution>
+						<id>default-deploy</id>
+						<phase>deploy</phase>
+						<goals>
+							<goal>deploy</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.sonatype.central</groupId>
+				<artifactId>central-publishing-maven-plugin</artifactId>
+				<version>0.8.0</version>
+				<extensions>true</extensions>
+				<configuration>
+					<publishingServerId>central</publishingServerId>
+					<autoPublish>true</autoPublish>
+					<waitUntil>published</waitUntil>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
+	
+	<profiles>
+		<profile>
+            <id>sign</id>
+            <activation>
+                <property>
+                    <name>sign</name>
+                </property>
+            </activation>
+            <build>
+				<plugins>
+					<!-- GPG Signed Components -->
+			      	<plugin>
+			        	<groupId>org.apache.maven.plugins</groupId>
+			        	<artifactId>maven-gpg-plugin</artifactId>
+			        	<version>3.2.7</version>
+			        	<executions>
+			          		<execution>
+			            		<id>sign-artifacts</id>
+			            		<phase>verify</phase>
+			            		<goals>
+			              			<goal>sign</goal>
+			            		</goals>
+			            		<configuration>
+				              		<gpgArguments>
+				                		<arg>--pinentry-mode</arg>
+				                		<arg>loopback</arg>
+				              		</gpgArguments>
+			            		</configuration>
+			          		</execution>
+			          	</executions>
+			      	</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

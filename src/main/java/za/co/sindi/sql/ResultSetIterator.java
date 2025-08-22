@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import za.co.sindi.common.util.CaseInsensitiveHashMap;
+import za.co.sindi.sql.util.CaseInsensitiveHashMap;
 
 /**
  * @author Bienfait Sindi

@@ -31,9 +31,6 @@ public class BeanProcessor<T> {
 
 	private Class<T> beanClass;
 	
-	/* (non-Javadoc)
-	 * @see com.softwareag.data.handler.ResultSetHandler#handle(java.sql.ResultSet)
-	 */
 	/**
 	 * @param clazz
 	 */
@@ -109,7 +106,7 @@ public class BeanProcessor<T> {
 			int columns = resultSetMetaData.getColumnCount();
 			
 			//Instantiate...
-			bean = beanClass.newInstance();
+			bean = beanClass.getDeclaredConstructor((Class<?>[]) null).newInstance();
 			
 			for (int columnIndex = 1; columnIndex <= columns; columnIndex++) {
 				String columnName = resultSetMetaData.getColumnName(columnIndex);
@@ -127,6 +124,18 @@ public class BeanProcessor<T> {
 			// TODO Auto-generated catch block
 			throw new SQLException("Unable to create a new instance of " + beanClass.getName(), e);
 		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			throw new SQLException("Unable to create a new instance of " + beanClass.getName(), e);
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			throw new SQLException("Unable to create a new instance of " + beanClass.getName(), e);
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			throw new SQLException("Unable to create a new instance of " + beanClass.getName(), e);
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			throw new SQLException("Unable to create a new instance of " + beanClass.getName(), e);
+		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
 			throw new SQLException("Unable to create a new instance of " + beanClass.getName(), e);
 		}
